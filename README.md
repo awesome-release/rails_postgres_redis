@@ -1,24 +1,51 @@
-# README
+# rails_postgres_redis
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This repository demonstrates an application setup using Rails, Postgres, and Redis which will run in Release. You can fork this repository and use it in Release to get started.
 
-Things you may want to cover:
+The following changes from a vanilla Rails app have been applied
 
-* Ruby version
+### Gemfile
 
-* System dependencies
+```
+gem 'faker'
+gem 'sidekiq'
+```
 
-* Configuration
+### config/database.yml
 
-* Database creation
+```
+username: <%= ENV.fetch("POSTGRES_USERNAME") { 'postgres' } %>
+password: <%= ENV.fetch("POSTGRES_PASSWORD") { 'postgres' } %>
+host: <%= ENV.fetch("POSTGRES_HOST") { 'localhost' } %>
+port: <%= ENV.fetch("POSTGRES_PORT") { '5432' } %>
+```
 
-* Database initialization
+Added setting up the database configuration from environment variables.
 
-* How to run the test suite
+### config/environments/development.rb
 
-* Services (job queues, cache servers, search engines, etc.)
+```
+# Whitelist the app to run on Release
+config.hosts << /.*\.releaseapp\.io/
+```
 
-* Deployment instructions
+Allow Rails to receive requests from Release
 
-* ...
+### db/migrate && app/models && app/controllers && app/jobs
+
+Added a migration to create a `users` table and with it a `User` model and `UsersController`. Also 
+created `CreateUsersJob` which will be used to create users asynchronously.
+
+
+### lib/tasks/db_exists.rake
+
+A rake task to check and see if the database exists in Postgresql or not; used in the startup
+command in `docker-compose.yml`.
+
+### Dockerfile
+
+The `Dockerfile` is based on alpine and installs the bare minimum packages to run Rails.
+
+### docker-compose.yml
+
+Defines the application and is used by Release to generate the Application Configuration.
