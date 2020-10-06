@@ -1,0 +1,49 @@
+version: '3'
+services:
+  web:
+    build: .
+    image: rails_postgres_redis:latest
+    command: bash -c "(rake db:exists && rake db:migrate || rake db:setup) && bundle exec rails s -b 0.0.0.0"
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_HOST: db
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+  
+  sidekiq:
+    image: rails_postgres_redis:latest
+    command: bundle exec sidekiq
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_HOST: db
+    depends_on:
+      - web
+      - redis
+      - db    
+
+  db:
+    image: postgres:12
+    ports:
+      - "5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+
+  redis:
+    image: redis
+    ports:
+      - "6379"
+    volumes:
+      - redis:/data
+
+volumes:
+  postgres-data: {}
+  redis: {}
