@@ -1,6 +1,6 @@
 version: '3'
 services:
-  web:
+  api:
     build: .
     image: rails_postgres_redis:latest
     command: bash -c "(rake db:exists && rake db:migrate || rake db:setup) && bundle exec rails s -b 0.0.0.0"
@@ -23,7 +23,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_HOST: db
     depends_on:
-      - web
+      - api
       - redis
       - db    
 

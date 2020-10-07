@@ -15,5 +15,15 @@ module RailsPostgresRedis
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
+
+    # NOTE: This should not be left completely wide open after getting your application running
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource "*",
+          headers: :any,
+          methods: [:get, :post, :put, :patch, :delete, :options, :head]
+      end
+    end
   end
 end

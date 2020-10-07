@@ -4,11 +4,31 @@ This repository demonstrates an application setup using Rails, Postgres, and Red
 
 The following changes from a vanilla Rails app have been applied
 
+
+### config/application.rb
+
+```
+# NOTE: This should not be left completely wide open after getting your application running
+config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins '*'
+    resource "*",
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head]
+  end
+end
+```
+
+While this repository can be used as a way to get started, it needs to be noted that it currently
+allows for requests from anywhere to be let through. This is good for getting up and running on Release
+but should not be used for a long lived environment.
+
 ### Gemfile
 
 ```
 gem 'faker'
 gem 'sidekiq'
+gem 'rack-cors'
 ```
 
 ### config/database.yml
@@ -29,7 +49,7 @@ Added setting up the database configuration from environment variables.
 config.hosts << /.*\.releaseapp\.io/
 ```
 
-Allow Rails to receive requests from Release
+Allow Rails to receive requests from Release.
 
 ### db/migrate && app/models && app/controllers && app/jobs
 
