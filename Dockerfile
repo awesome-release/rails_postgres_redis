@@ -1,5 +1,5 @@
-FROM ruby:2.7.1-alpine
-RUN apk add --update --no-cache bash build-base nodejs tzdata postgresql-dev yarn
+FROM ruby:3.0.0-alpine
+RUN apk add --update --no-cache bash build-base nodejs tzdata postgresql-dev yarn shared-mime-info
 RUN gem install bundler
 
 WORKDIR /app
