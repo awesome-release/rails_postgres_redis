@@ -60,6 +60,6 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  # Whitelist the app to run on Release
-  config.hosts << /.*\.releaseapp\.io/
+  # Allow requests from any domain
+  config.hosts = nil
 end
