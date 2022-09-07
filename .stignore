@@ -1,2 +1,3 @@
-.git
-/vendor/bundle
+(?d).git
+(?d)/vendor/bundle
+(?d)/tmp
