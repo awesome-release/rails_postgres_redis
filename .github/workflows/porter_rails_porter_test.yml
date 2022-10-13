@@ -17,7 +17,7 @@ jobs:
       uses: porter-dev/porter-update-action@v0.1.0
       with:
         app: rails-porter-test
-        cluster: "2420"
+        cluster: "2425"
         host: https://dashboard.getporter.dev
         namespace: default
         project: "3856"
