@@ -1,4 +1,5 @@
-FROM ruby:3.0.0-alpine
+ARG RUBY_VERSION=3.0.0
+FROM ruby:${RUBY_VERSION}-alpine
 RUN apk add --update --no-cache bash build-base nodejs tzdata postgresql-dev yarn shared-mime-info
 RUN gem install bundler
 
